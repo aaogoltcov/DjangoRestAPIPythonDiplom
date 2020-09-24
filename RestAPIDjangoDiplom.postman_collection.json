@@ -1,0 +1,253 @@
+{
+	"info": {
+		"_postman_id": "c2f827cc-d9ac-4d3c-9a18-4e86b541662d",
+		"name": "RestAPIDjangoDiplom",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "YamlFileUpload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "filename",
+							"type": "file",
+							"src": "/Users/alexeyogoltsov/PycharmProjects/RestAPIPythonDiplom/data/shop1.yaml"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/upload/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"upload",
+						""
+					]
+				},
+				"description": "    \"\"\"\n    Загрузка данных в модель Shop (первоначальная информация о магазине, товарах и категориях)\n    В Postman в body нужно выбрать form-data и задать key 'filename' (тип file) с указание файла в поле value\n    \"\"\""
+			},
+			"response": []
+		},
+		{
+			"name": "User login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "admin@admin.ru",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/user/login",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User registration",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRFToken",
+						"value": "getCookie('csrftoken')",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "alex@alex.ru",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "alex",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "alexalex8",
+							"type": "text"
+						},
+						{
+							"key": "first_name",
+							"value": "Aleksei",
+							"type": "text"
+						},
+						{
+							"key": "last_name",
+							"value": "Ogoltcov",
+							"type": "text"
+						},
+						{
+							"key": "middle_name",
+							"value": "Andreevich",
+							"type": "text"
+						},
+						{
+							"key": "company",
+							"value": "Severstal",
+							"type": "text"
+						},
+						{
+							"key": "position",
+							"value": "Engineer",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/user/signup",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Products list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product get",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Basket PUT product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Basket GET product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Basket CHANGE product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Basket DELETE product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order GET product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order POST product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

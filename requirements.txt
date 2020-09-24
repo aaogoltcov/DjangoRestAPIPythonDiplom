@@ -1,0 +1,7 @@
+Django~=3.1
+djangorestframework~=3.11.1
+pip~=20.2.3
+PyYAML~=5.3.1
+djangorestframework-yaml~=2.0.0
+jsonfield~=3.1.0
+ujson~=3.2.0
