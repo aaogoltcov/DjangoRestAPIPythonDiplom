@@ -5,20 +5,24 @@ from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 
 from user_account.serializers import UserSerializer
-from user_account.signals import new_user_registered
+# from user_account.signals import new_user_registered
+from .tasks import new_user_registered
 
 
 class LoginAccount(APIView):
     """
     Класс для авторизации пользователей
-    Для авторизации необходимо в form-data указать, например: [
-             { key: 'email' , value: 'aaogoltcov@mail.ru' },
-             { key: 'password' , value: 'aaogoltcov' },
-            ]
     """
 
-    # Авторизация методом POST
     def post(self, request, *args, **kwargs):
+        """
+        POST - авторизация пользователей
+        :param request: Для авторизации необходимо в form-data указать, например: [
+                         { key: 'email' , value: 'aaogoltcov@mail.ru' },
+                         { key: 'password' , value: 'aaogoltcov' },
+                        ]
+        :return: статус авторизации и токен
+        """
         if {'email', 'password'}.issubset(request.data):
             user = authenticate(request=request, username=request.data['email'], password=request.data['password'])
             print(user, request.data['email'], request.data['password'])
@@ -35,25 +39,27 @@ class LoginAccount(APIView):
 class RegisterAccount(APIView):
     """
     Класс регистрации покупателей
-    Для регистрации необходимо в form-data указать, например: [
-             { key: 'email' , value: 'aaogoltcov@mail.ru' },
-             { key: 'username' , value: 'aaogoltcov' },
-             { key: 'password' , value: 'aaogoltcov' },
-             { key: 'first_name' , value: 'aaogoltcov' },
-             { key: 'last_name' , value: 'aaogoltcov' },
-             { key: 'middle_name' , value: 'aaogoltcov' },
-             { key: 'company' , value: 'aaogoltcov' },
-             { key: 'position' , value: 'aaogoltcov' },
-            ]
     """
 
-    # Регистрация методом POST
     def post(self, request, *args, **kwargs):
+        """
+        POST - регистрация покупателей
+        :param request: Для регистрации необходимо в form-data указать, например: [
+                         { key: 'email' , value: 'aaogoltcov@mail.ru' },
+                         { key: 'username' , value: 'aaogoltcov' },
+                         { key: 'password' , value: 'aaogoltcov' },
+                         { key: 'first_name' , value: 'aaogoltcov' },
+                         { key: 'last_name' , value: 'aaogoltcov' },
+                         { key: 'middle_name' , value: 'aaogoltcov' },
+                         { key: 'company' , value: 'aaogoltcov' },
+                         { key: 'position' , value: 'aaogoltcov' },
+                        ]
+        :return: статус регистрации
+        """
         print('+', request.data)
         # проверяем обязательные аргументы
         if {'first_name', 'last_name', 'middle_name', 'email', 'username', 'password', 'company', 'position'} \
                 .issubset(request.data):
-            errors = {}
             # проверяем пароль на сложность
             try:
                 validate_password(request.data['password'])
@@ -73,7 +79,8 @@ class RegisterAccount(APIView):
                     user = user_serializer.save()
                     user.set_password(request.data['password'])
                     user.save()
-                    new_user_registered.send(sender=self.__class__, user_id=user.id)
+                    # new_user_registered.send(sender=self.__class__, user_id=user.id)
+                    new_user_registered.delay(user_id=user.id)
                     return JsonResponse({'Status': True})
                 else:
                     return JsonResponse({'Status': False, 'Errors': user_serializer.errors})

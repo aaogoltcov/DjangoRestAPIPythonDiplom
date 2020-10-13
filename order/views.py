@@ -6,55 +6,24 @@ from rest_framework.views import APIView
 
 from order.models import Order, OrderItem
 from order.serializers import OrderSerializer
-from order.sygnals import new_order
+from .tasks import new_order
 
 
 class BasketView(APIView):
     """
     Класс для работы с корзиной пользователя
-    GET - для получения информации из корзины в Header нужно добавить, например так: {
-                key: 'Authorization',
-                value: 'Token 80d57ddd904f358b00375f500d74d181fdbc9a58' }
-    POST - для редактирования корзины в Header нужно добавить, например так: {
-                key: 'Authorization',
-                value: 'Token 80d57ddd904f358b00375f500d74d181fdbc9a58' }, а в body raw в формате json:
-                {
-                    "items": [
-                                {
-                                    "id": 1,
-                                    "quantity": 5
-                                },
-                                {
-                                    "id": 2,
-                                    "quantity": 5
-                                }
-                            ]
-                }
-    DELETE - для товаров из корзины в Header нужно добавить, например так: {
-                key: 'Authorization',
-                value: 'Token 80d57ddd904f358b00375f500d74d181fdbc9a58' }, а в body raw в формате json:
-                {
-                    "items": [ 1, 2 ]
-                }
-    PUT - для добавления товаров в корзину в Header нужно добавить, например так: {
-                key: 'Authorization',
-                value: 'Token 80d57ddd904f358b00375f500d74d181fdbc9a58' }, а в body raw в формате json:
-                {
-                    "items": [
-                                {
-                                    "id": 1,
-                                    "quantity": 1
-                                },
-                                {
-                                    "id": 2,
-                                    "quantity": 10
-                                }
-                            ]
-                }
     """
 
-    # получить корзину
     def get(self, request, *args, **kwargs):
+        """
+        GET - получение информации из корзины
+        :param request: в Header нужно добавить, например так:
+                        {
+                        key: 'Authorization',
+                        value: 'Token 80d57ddd904f358b00375f500d74d181fdbc9a58'
+                        }
+        :return: информация по товарам в корзине
+        """
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
         basket = Order.objects.filter(
@@ -65,8 +34,28 @@ class BasketView(APIView):
         serializer = OrderSerializer(basket, many=True)
         return Response(serializer.data)
 
-    # редактировать корзину
     def post(self, request, *args, **kwargs):
+        """
+        POST - редактирование корзины
+        :param request: в Header нужно добавить, например так:
+                        {
+                        key: 'Authorization',
+                        value: 'Token 80d57ddd904f358b00375f500d74d181fdbc9a58'
+                        }, а в body raw в формате json:
+                        {
+                        "items": [
+                                    {
+                                        "id": 1,
+                                        "quantity": 5
+                                    },
+                                    {
+                                        "id": 2,
+                                        "quantity": 5
+                                    }
+                                ]
+                        }
+        :return: статус и количество обновленных дефектов
+        """
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
         product_items = request.data.get('items')
@@ -79,12 +68,23 @@ class BasketView(APIView):
                 item.update({'order_id': basket.id, 'product_info_id': item['id']})
                 objects_created += 1
             return JsonResponse({'Status': True,
-                                 'Создано объектов': objects_created,
+                                 'Обновлено объектов': objects_created,
                                  'data': list(OrderItem.objects.filter(order_id=basket.id).values())})
         return JsonResponse({'Status': False, 'Errors': 'Не указаны все необходимые аргументы'})
 
-    # удалить товары из корзины
     def delete(self, request, *args, **kwargs):
+        """
+        DELETE - удаление товаров из корзины
+        :param request: в Header нужно добавить, например так:
+                        {
+                        key: 'Authorization',
+                        value: 'Token 80d57ddd904f358b00375f500d74d181fdbc9a58'
+                        }, а в body raw в формате json:
+                        {
+                            "items": [ 1, 2 ]
+                        }
+        :return: статус об удалении товаров из корзины
+        """
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 
@@ -104,8 +104,28 @@ class BasketView(APIView):
                 return JsonResponse({'Status': True, 'Удалено объектов': deleted_count})
         return JsonResponse({'Status': False, 'Errors': 'Не указаны все необходимые аргументы'})
 
-    # добавить позиции в корзину
     def put(self, request, *args, **kwargs):
+        """
+        PUT - добавление товаров в корзину
+        :param request: в Header нужно добавить, например так:
+                        {
+                        key: 'Authorization',
+                        value: 'Token 80d57ddd904f358b00375f500d74d181fdbc9a58'
+                        }, а в body raw в формате json:
+                        {
+                        "items": [
+                                    {
+                                        "id": 1,
+                                        "quantity": 1
+                                    },
+                                    {
+                                        "id": 2,
+                                        "quantity": 10
+                                    }
+                                ]
+                        }
+        :return: статус о добавлении товаров в корзину
+        """
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
         product_items = request.data.get('items')
@@ -118,27 +138,24 @@ class BasketView(APIView):
                     objects_updated += OrderItem.objects.filter(order_id=basket.id, product_info_id=item['id']).update(
                         quantity=item['quantity']
                     )
-            return JsonResponse({'Status': True, 'Обновлено объектов': objects_updated})
+            return JsonResponse({'Status': True, 'Добавлено объектов': objects_updated})
         return JsonResponse({'Status': False, 'Errors': 'Не указаны все необходимые аргументы'})
 
 
 class OrderView(APIView):
     """
     Класс для получения и размешения заказов пользователями
-    GET - для получения информации по заказам в Header нужно добавить, например так: {
-            key: 'Authorization',
-            value: 'Token 80d57ddd904f358b00375f500d74d181fdbc9a58' }
-    POST - для размещения заказа из корзины в Header нужно добавить, например так: {
-            key: 'Authorization',
-            value: 'Token 80d57ddd904f358b00375f500d74d181fdbc9a58' }, а в body raw в формате json:
-            {
-                "order_id": 2,
-                "profile_id": 3
-            }
     """
-
-    # получить мои заказы
     def get(self, request, *args, **kwargs):
+        """
+        GET - получение информации по заказам
+        :param request: в Header нужно добавить Token, например так:
+                        {
+                        key: 'Authorization',
+                        value: 'Token 80d57ddd904f358b00375f500d74d181fdbc9a58'
+                        }
+        :return: Информация по заказу
+        """
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
         order = Order.objects.filter(
@@ -151,6 +168,20 @@ class OrderView(APIView):
 
     # разместить заказ из корзины
     def post(self, request, *args, **kwargs):
+        """
+        POST - размещение заказа
+        :param request: в Header нужно добавить Token, например так:
+                        {
+                        key: 'Authorization',
+                        value: 'Token 80d57ddd904f358b00375f500d74d181fdbc9a58'
+                        }, а в body raw в формате json:
+                        {
+                            "order_id": 2,
+                            "profile_id": 3
+                        }
+        :kwargs: order_id, profile_id
+        :return: Статус обработки
+        """
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 
@@ -162,10 +193,11 @@ class OrderView(APIView):
                         profile_id=request.data['profile_id'],
                         status='new')
                 except IntegrityError as error:
-                    return JsonResponse({'Status': False, 'Errors': 'Неправильно указаны аргументы'})
+                    return JsonResponse({'Status': False, 'Errors': f'Неправильно указаны аргументы: {error}'})
                 else:
                     if is_updated:
-                        new_order.send(sender=self.__class__, user_id=request.user.id)
+                        # new_order.send(sender=self.__class__, user_id=request.user.id)
+                        new_order.delay(user_id=request.user.id)
                         return JsonResponse({'Status': True})
 
         return JsonResponse({'Status': False, 'Errors': 'Не указаны все необходимые аргументы'})

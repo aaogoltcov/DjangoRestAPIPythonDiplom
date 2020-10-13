@@ -1,16 +1,12 @@
-from django.conf import settings
+from celery import shared_task
 from django.core.mail import EmailMultiAlternatives
-from django.dispatch import receiver, Signal
 
+from Orders import settings
 from user_account.models import ConfirmEmailToken
 
-new_user_registered = Signal(
-    providing_args=['user_id'],
-)
 
-
-@receiver(new_user_registered)
-def new_user_registered_signal(user_id, **kwargs):
+@shared_task
+def new_user_registered(user_id, **kwargs):
     """
     Отправляем письмо с подтрердждением почты
     """

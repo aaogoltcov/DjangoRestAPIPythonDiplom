@@ -1,15 +1,12 @@
-from django.conf import settings
+from celery import shared_task
 from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
-from django.dispatch import receiver, Signal
 
-new_order = Signal(
-    providing_args=['user_id'],
-)
+from Orders import settings
 
 
-@receiver(new_order)
-def new_order_signal(user_id, **kwargs):
+@shared_task
+def new_order(user_id, **kwargs):
     """
     Отправяем письмо при изменении статуса заказа
     """

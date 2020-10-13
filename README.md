@@ -5,15 +5,24 @@ create user rest_api with password 'rest_api';
 alter role rest_api set client_encoding to 'utf8';
 alter role rest_api set timezone to 'UTC';
 create database rest_api owner rest_api;
+alter user rest_api createdb;
 
 PROJECT
 
+redis-server
+celery -A Orders worker --loglevel=INFO
+python manage.py makemigrations
+python manage.py migrate
 python manage.py createsuperuser
 login: admin
 email: admin@admin.ru
 password: admin
-python manage.py makemigrations
-python manage.py migrate
+python manage.py runserver
+python manage.py test
+
+POSTMAN
+
+Ссылка для импорта - http://127.0.0.1:8000/openapi
 
 Критерии достижения:
 

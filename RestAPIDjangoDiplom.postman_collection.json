@@ -101,12 +101,12 @@
 					"formdata": [
 						{
 							"key": "email",
-							"value": "alex@alex.ru",
+							"value": "aaogoltcov@mail.ru",
 							"type": "text"
 						},
 						{
 							"key": "username",
-							"value": "alex",
+							"value": "alex8",
 							"type": "text"
 						},
 						{
@@ -163,21 +163,97 @@
 		{
 			"name": "Products list",
 			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Token 497dd4a5220392f6e9cbcd44ea5b88b1615ab9f9",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "http://127.0.0.1:8000/api/products/pk/get",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"products",
+						"pk",
+						"get"
+					]
 				}
 			},
 			"response": []
 		},
 		{
 			"name": "Product get",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Token 497dd4a5220392f6e9cbcd44ea5b88b1615ab9f9",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": ""
+					"raw": "http://127.0.0.1:8000/api/products/pk/get?product_id=1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"products",
+						"pk",
+						"get"
+					],
+					"query": [
+						{
+							"key": "product_id",
+							"value": "1"
+						}
+					]
 				}
 			},
 			"response": []
@@ -185,10 +261,46 @@
 		{
 			"name": "Basket PUT product",
 			"request": {
-				"method": "GET",
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Token 3ecaa0f013165056af898e0adc2e2bed8d1fa6db",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"items\": [\n                {\n                    \"id\": 1,\n                    \"quantity\": 1\n                },\n                {\n                    \"id\": 2,\n                    \"quantity\": 10\n                }\n            ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": ""
+					"raw": "http://127.0.0.1:8000/api/basket",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"basket"
+					]
 				}
 			},
 			"response": []
@@ -196,10 +308,37 @@
 		{
 			"name": "Basket GET product",
 			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Token 3ecaa0f013165056af898e0adc2e2bed8d1fa6db",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "http://127.0.0.1:8000/api/basket",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"basket"
+					]
 				}
 			},
 			"response": []
@@ -207,10 +346,46 @@
 		{
 			"name": "Basket CHANGE product",
 			"request": {
-				"method": "GET",
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Token 3ecaa0f013165056af898e0adc2e2bed8d1fa6db",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"items\": [\n                {\n                    \"id\": 1,\n                    \"quantity\": 5\n                },\n                {\n                    \"id\": 2,\n                    \"quantity\": 5\n                }\n            ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": ""
+					"raw": "http://127.0.0.1:8000/api/basket",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"basket"
+					]
 				}
 			},
 			"response": []
@@ -218,10 +393,46 @@
 		{
 			"name": "Basket DELETE product",
 			"request": {
-				"method": "GET",
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Token 3ecaa0f013165056af898e0adc2e2bed8d1fa6db",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"items\": [ 1, 2 ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": ""
+					"raw": "http://127.0.0.1:8000/api/basket",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"basket"
+					]
 				}
 			},
 			"response": []
@@ -229,16 +440,90 @@
 		{
 			"name": "Order GET product",
 			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Token 3ecaa0f013165056af898e0adc2e2bed8d1fa6db",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "http://127.0.0.1:8000/api/order",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"order"
+					]
 				}
 			},
 			"response": []
 		},
 		{
 			"name": "Order POST product",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Token 3ecaa0f013165056af898e0adc2e2bed8d1fa6db",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"order_id\": 2,\n    \"profile_id\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/order",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OpenAPI",
 			"request": {
 				"method": "GET",
 				"header": [],

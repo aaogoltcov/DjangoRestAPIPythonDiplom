@@ -14,14 +14,16 @@ from shop.models import Shop, Category
 
 
 class YamlFileUpload(APIView):
-    """
-    Загрузка данных в модель Shop (первоначальная информация о магазине, товарах и категориях)
-    В Postman в body нужно выбрать form-data и задать key 'filename' (тип file) с указание файла в поле value
-    """
+
     parser_classes = (MultiPartParser,)
     renderer_classes = (YAMLRenderer,)
 
     def post(self, request, format=None):
+        """
+        Загрузка данных в модель Shop (первоначальная информация о магазине, товарах и категориях)
+        В Postman в body нужно выбрать form-data и задать key 'filename' (тип file) с указание файла в поле value
+        """
+
         filename = request.data['filename']
         if filename:
             try:
